@@ -35,7 +35,7 @@ All numbers below are from simulation. **The robot has not been tested on real h
 | Get up from all 8 starting positions (normal conditions) | 100% |
 | Get up **and** walk 5 m | 32 / 32 |
 | Under harder conditions (10% weaker motors, randomized physics, rough ground) — stands and holds | ~88% |
-| Under harder conditions — reaches a stable stand | ~98% |
+| Under harder conditions, with random pushes — back on its feet within 6 seconds | ~84% |
 | Checked in a second physics engine (MuJoCo), never trained there | ~97% |
 | Typical time to stand back up | ~3 seconds |
 
