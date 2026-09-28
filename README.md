@@ -13,6 +13,16 @@ Get your own Asimov 1.
 Standalone Isaac Lab extension for training Asimov-1 locomotion policies with
 PPO and adversarial motion priors (AMP).
 
+## CPU MuJoCo walking
+
+The [`mujoco_rl/`](mujoco_rl/README.md) package trains a 12-joint forward
+walking policy on CPU with native MuJoCo and PPO. It has a separate Python
+environment and does not require Isaac Sim or an NVIDIA GPU. Its pinned robot
+model, training commands, evaluation criteria, and replay instructions are in
+the [CPU walking guide](mujoco_rl/README.md). A validated policy and preview
+are in [`mujoco_rl/checkpoints/forward_v1/`](mujoco_rl/checkpoints/forward_v1/README.md).
+Raw training runs under `logs/mujoco_rl/` are excluded from Git.
+
 ## Quick Install
 
 For a brand-new machine with no existing Isaac Lab setup, run the install
