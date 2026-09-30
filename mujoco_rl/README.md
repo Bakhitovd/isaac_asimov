@@ -5,7 +5,9 @@
 The new `full_body_*` modules use the pinned `third_party/asimov-1` MuJoCo
 model. They control 23 joints (legs, waist, and arms) and train a policy from
 random weights to stand, then walk at 0.2 m/s. The older 12-joint experiment
-described below remains available for comparison.
+described below remains available for comparison. A trained policy, preview,
+and 100-episode evaluation record are in
+[`checkpoints/full_body_v1/`](checkpoints/full_body_v1/README.md).
 
 Initialize the robot asset and use the existing CPU environment:
 

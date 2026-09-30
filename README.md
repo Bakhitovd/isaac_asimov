@@ -22,7 +22,8 @@ The package also retains the earlier 12-joint walking baseline and its
 [checkpoint and preview](mujoco_rl/checkpoints/forward_v1/README.md). Training
 commands, evaluation criteria, and replay instructions are in the
 [CPU walking guide](mujoco_rl/README.md). Raw runs under `logs/mujoco_rl/` are
-excluded from Git.
+excluded from Git. The trained 23-joint policy, replay, and evaluation records
+are in [`mujoco_rl/checkpoints/full_body_v1/`](mujoco_rl/checkpoints/full_body_v1/README.md).
 
 ## Quick Install
 

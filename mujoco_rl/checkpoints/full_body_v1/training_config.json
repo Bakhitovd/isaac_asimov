@@ -1,0 +1,29 @@
+{
+  "task": "walk",
+  "seed": 42,
+  "workers": 24,
+  "model_revision": "732cc60dcb8f2b4fd26c3d7346b35f9b89c3cd47",
+  "physics_dt": 0.005,
+  "policy_dt": 0.02,
+  "max_steps": 100000000,
+  "resume": "logs/mujoco_rl/full_body_v7/walk/best.zip",
+  "algorithm": "Stable-Baselines3 PPO",
+  "actor_critic": [
+    256,
+    256,
+    128
+  ],
+  "learning_rate": 2e-05,
+  "entropy_coefficient": 0.0001,
+  "target_kl": 0.006,
+  "mirror_training_episodes": true,
+  "clip_range": 0.1,
+  "n_epochs": 3,
+  "evaluation_seeds": 50,
+  "eval_interval": 100000,
+  "source_sha256": {
+    "full_body_env.py": "31f08dd2de5a612926b25b5dbf7a2f1df7b943765a105ee703785e80b472c0e0",
+    "full_body_train.py": "218096a5fa0ac6bcd18a62b935a2d1efb61e85f837eaa27f05cec60c557833ea",
+    "full_body_eval.py": "683e159f4483ea9a31e03b89a39a68ccf5a4340eeb296e472d10233a1ab10b9f"
+  }
+}
