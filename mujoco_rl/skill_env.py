@@ -271,12 +271,12 @@ class SkillEnv(FullBodyEnv):
             bearing = abs(math.atan2(self.goal_body[1], self.goal_body[0]))
             heading_progress = float(np.clip((old_bearing - bearing) / POLICY_DT, -0.6, 0.6))
             waiting = float(not near and abs(progress) < 0.02 and abs(float(gyro[2])) < 0.05)
-            reward = (4.0 * progress + 2.0 * heading_progress + 0.6 * tracking
-                      + 0.6 * turning + 0.6 * upright + 1.0 * float(near)
-                      - 0.5 - 0.2 * distance - waiting - 4.0 * slip
+            reward = (5.0 * progress + 2.0 * heading_progress + tracking
+                      + turning + upright + 2.0 * float(near)
+                      - 0.1 * distance - 0.3 * waiting - 4.0 * slip
                       - 0.2 * abs(float(body_velocity[1])))
             if self.success:
-                reward += 50.0
+                reward += 100.0
         elif self.skill == "squat":
             within_cycle = self.step_count % 250
             cycle = min(self.step_count // 250, 2)
@@ -333,7 +333,7 @@ class SkillEnv(FullBodyEnv):
                 reward += 30.0
         reward -= 0.15 * action_rate + 0.05 * action_accel + 0.03 * effort
         if self.skill != "recover" and (fallen or nonfinite):
-            reward -= 20.0
+            reward -= 100.0
         terminated = bool(self.success or nonfinite or (fallen and self.skill != "recover"))
         truncated = self.step_count >= MAX_STEPS[self.skill]
         info = {
