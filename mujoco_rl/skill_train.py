@@ -29,7 +29,8 @@ STAGE_ORDER = ("nav", "squat", "recover", "run", "jump")
 
 def _factory(skill: str, seed: int):
     def create():
-        env = Monitor(SkillEnv(skill, randomize=True))
+        env = Monitor(SkillEnv(skill, randomize=True,
+                               curriculum_level=0.0 if skill == "nav" else 1.0))
         env.reset(seed=seed)
         return env
     return create
@@ -133,6 +134,10 @@ class GateCallback(BaseCallback):
         with (self.run_dir / "evaluations.jsonl").open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(record) + "\n")
         self.logger.record("eval/pass_rate", result["pass_rate"])
+        if self.skill == "nav":
+            level = min(1.0, self.num_timesteps / 1_500_000)
+            normalizer.venv.env_method("set_curriculum_level", level)
+            self.logger.record("train/curriculum_level", level)
         print(f"[eval] {self.skill} {self.num_timesteps:,} steps: dev={result['pass_rate']:.1%}, "
               f"holdout={record.get('holdout', {}).get('pass_rate', 'pending')}, "
               f"accepted={self.accepted}", flush=True)
@@ -167,6 +172,7 @@ def train_stage(skill: str, run_dir: Path, workers: int, seed: int, hours: float
     config = {"skill": skill, "workers": workers, "seed": seed,
               "hours": hours, "max_steps": max_steps, "eval_interval": eval_interval,
               "learning_rate": learning_rate,
+              "navigation_curriculum_steps": 1_500_000 if skill == "nav" else None,
               "warm_start": str(warm_start) if warm_start else None,
               "resume": str(resume) if resume else None,
               "development_seeds": [10_001, 10_050], "first_holdout_seeds": [10_051, 10_100],

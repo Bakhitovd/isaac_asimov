@@ -26,13 +26,15 @@ def _yaw(quaternion: np.ndarray) -> float:
 class SkillEnv(FullBodyEnv):
     """Keep the published walking observation as the first 78 channels."""
 
-    def __init__(self, skill: str, render_mode: str | None = None, randomize: bool = True):
+    def __init__(self, skill: str, render_mode: str | None = None, randomize: bool = True,
+                 curriculum_level: float = 1.0):
         if skill not in SKILLS and skill != "run_train":
             raise ValueError(f"Unknown skill: {skill}")
         super().__init__(task="walk", render_mode=render_mode, randomize=randomize,
                          support_contacts=True)
         self.training_skill = skill
         self.skill = "nav" if skill == "run_train" else skill
+        self.curriculum_level = float(np.clip(curriculum_level, 0.0, 1.0))
         self.observation_space = spaces.Box(-np.inf, np.inf, shape=(83,), dtype=np.float32)
         self.command = np.zeros(2)
         self.goal_world = np.zeros(2)
@@ -56,6 +58,9 @@ class SkillEnv(FullBodyEnv):
         self.total_slip = 0.0
         self.self_contact_steps = 0
         self.squat_air_steps = 0
+
+    def set_curriculum_level(self, level: float) -> None:
+        self.curriculum_level = float(np.clip(level, 0.0, 1.0))
 
     def _goal_and_command(self) -> None:
         yaw = _yaw(self.data.qpos[3:7])
@@ -102,7 +107,7 @@ class SkillEnv(FullBodyEnv):
         self.command = np.zeros(2)
         self.goal_body = np.zeros(2)
         self.goal_world = np.zeros(2)
-        self.nav_max_speed = 0.30
+        self.nav_max_speed = 0.20 + 0.10 * self.curriculum_level if self.training_skill == "nav" else 0.30
         super().reset(seed=seed, options=options)
         self.skill = ("nav" if self.np_random.random() < 0.3 else "run") if self.training_skill == "run_train" else self.training_skill
         self.stable_steps = 0
@@ -119,8 +124,9 @@ class SkillEnv(FullBodyEnv):
         self.self_contact_steps = 0
         self.squat_air_steps = 0
         if self.skill == "nav":
-            distance = self.np_random.uniform(0.5, 2.5)
-            angle = self.np_random.uniform(-math.pi, math.pi)
+            distance = self.np_random.uniform(0.5, 1.5 + self.curriculum_level)
+            angle_limit = 0.35 + (math.pi - 0.35) * self.curriculum_level
+            angle = self.np_random.uniform(-angle_limit, angle_limit)
             self.goal_world = self.data.qpos[:2] + distance * np.array([math.cos(angle), math.sin(angle)])
             self._goal_and_command()
         elif self.skill == "recover":
