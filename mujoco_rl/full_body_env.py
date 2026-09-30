@@ -89,7 +89,8 @@ class FullBodyEnv(gym.Env[np.ndarray, np.ndarray]):
 
     metadata = {"render_modes": ["rgb_array"], "render_fps": 50}
 
-    def __init__(self, task: str = "stand", render_mode: str | None = None, randomize: bool = True):
+    def __init__(self, task: str = "stand", render_mode: str | None = None, randomize: bool = True,
+                 support_contacts: bool = False):
         super().__init__()
         if task not in {"stand", "walk"}:
             raise ValueError("task must be 'stand' or 'walk'")
@@ -102,6 +103,14 @@ class FullBodyEnv(gym.Env[np.ndarray, np.ndarray]):
         self.randomize = randomize
 
         spec = mujoco.MjSpec.from_file(str(XML_PATH))
+        if support_contacts:
+            for side in ("left", "right"):
+                wrist = spec.body(f"{side}_wrist_yaw_link")
+                wrist.add_geom(name=f"{side}_wrist_support_collision",
+                               type=mujoco.mjtGeom.mjGEOM_SPHERE,
+                               pos=[0.0, 0.0, -0.025], size=[0.025, 0.0, 0.0],
+                               contype=1, conaffinity=1,
+                               friction=[0.8, 0.005, 0.0001])
         for name in JOINT_NAMES:
             actuator = spec.add_actuator(name=f"{name}_motor")
             actuator.set_to_motor()
