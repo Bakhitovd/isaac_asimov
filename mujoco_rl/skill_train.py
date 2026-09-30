@@ -101,7 +101,17 @@ class GateCallback(BaseCallback):
         assert isinstance(normalizer, VecNormalize)
         result = evaluate(self.model, normalizer, self.skill)
         record = {"training_steps": self.num_timesteps, "development": result}
-        score = result["pass_rate"]
+        checkpoint_name = f"checkpoint_{self.num_timesteps}"
+        self.model.save(str(self.run_dir / checkpoint_name))
+        normalizer.save(str(self.run_dir / f"{checkpoint_name}_vecnormalize.pkl"))
+        episodes = result["episodes"]
+        mean_duration = float(np.mean([item["seconds"] for item in episodes]))
+        if self.skill == "nav":
+            near_count = sum(item["distance_to_goal_m"] < 0.25 for item in episodes)
+            mean_goal_distance = float(np.mean([item["distance_to_goal_m"] for item in episodes]))
+            score = 10.0 * result["pass_rate"] + 0.02 * near_count + 0.01 * mean_duration - 0.2 * mean_goal_distance
+        else:
+            score = 10.0 * result["pass_rate"] + 0.001 * mean_duration
         if score > self.best_score:
             self.best_score = score
             self.model.save(str(self.run_dir / "best"))
@@ -138,13 +148,13 @@ def train_stage(skill: str, run_dir: Path, workers: int, seed: int, hours: float
         env = VecNormalize.load(str(_stats_path(resume)), base)
         env.training = True
         model = PPO.load(str(resume), env=env, device="cpu")
-        learning_rate = 1e-4 if skill in {"nav", "run"} else 3e-4
+        learning_rate = 5e-5 if skill == "nav" else 1e-4 if skill == "run" else 3e-4
         model.lr_schedule = get_schedule_fn(learning_rate)
         for group in model.policy.optimizer.param_groups:
             group["lr"] = learning_rate
     else:
         env = VecNormalize(base, norm_obs=True, norm_reward=False, clip_obs=10.0)
-        learning_rate = 1e-4 if skill in {"nav", "run"} else 3e-4
+        learning_rate = 5e-5 if skill == "nav" else 1e-4 if skill == "run" else 3e-4
         model = PPO("MlpPolicy", env, device="cpu", seed=seed, verbose=1,
                     n_steps=256, batch_size=512, n_epochs=4, learning_rate=learning_rate,
                     gamma=0.99, gae_lambda=0.95, clip_range=0.15,
@@ -156,6 +166,7 @@ def train_stage(skill: str, run_dir: Path, workers: int, seed: int, hours: float
             _warm_start(model, env, warm_start)
     config = {"skill": skill, "workers": workers, "seed": seed,
               "hours": hours, "max_steps": max_steps, "eval_interval": eval_interval,
+              "learning_rate": learning_rate,
               "warm_start": str(warm_start) if warm_start else None,
               "resume": str(resume) if resume else None,
               "development_seeds": [10_001, 10_050], "first_holdout_seeds": [10_051, 10_100],

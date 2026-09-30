@@ -187,6 +187,8 @@ class SkillEnv(FullBodyEnv):
         if action.shape != (self.nj,) or not np.isfinite(action).all():
             raise ValueError("Expected 23 finite joint commands")
         action = np.clip(action, -1.0, 1.0)
+        old_distance = float(np.linalg.norm(self.goal_world - self.data.qpos[:2]))
+        old_bearing = abs(math.atan2(self.goal_body[1], self.goal_body[0]))
         if self.skill == "nav":
             self._goal_and_command()
         elif self.skill == "run":
@@ -265,10 +267,16 @@ class SkillEnv(FullBodyEnv):
                             and self.self_contact_steps == 0)
             tracking = math.exp(-((float(body_velocity[0]) - self.command[0]) / 0.18) ** 2)
             turning = math.exp(-((float(gyro[2]) - self.command[1]) / 0.45) ** 2)
-            reward = (2.0 * tracking + turning + upright + 0.5 * float(near)
-                      - 0.8 * distance - 4.0 * slip - 0.3 * abs(float(body_velocity[1])))
+            progress = float(np.clip((old_distance - distance) / POLICY_DT, -0.5, 0.5))
+            bearing = abs(math.atan2(self.goal_body[1], self.goal_body[0]))
+            heading_progress = float(np.clip((old_bearing - bearing) / POLICY_DT, -0.6, 0.6))
+            waiting = float(not near and abs(progress) < 0.02 and abs(float(gyro[2])) < 0.05)
+            reward = (4.0 * progress + 2.0 * heading_progress + 0.6 * tracking
+                      + 0.6 * turning + 0.6 * upright + 1.0 * float(near)
+                      - 0.5 - 0.2 * distance - waiting - 4.0 * slip
+                      - 0.2 * abs(float(body_velocity[1])))
             if self.success:
-                reward += 30.0
+                reward += 50.0
         elif self.skill == "squat":
             within_cycle = self.step_count % 250
             cycle = min(self.step_count // 250, 2)

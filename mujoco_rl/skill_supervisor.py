@@ -32,8 +32,11 @@ class SkillSupervisor:
         self.pending_goal: np.ndarray | None = None
         self.pending_speed = 0.30
         self.events: list[str] = []
+        self.faulted = False
 
     def command(self, name: str, target_xy: tuple[float, float] | None = None) -> None:
+        if self.faulted:
+            raise RuntimeError("Recovery failed; reset the simulator before sending another command")
         if name in {"go_to", "run_to"}:
             if target_xy is None:
                 raise ValueError("Travel commands require target_xy")
@@ -60,6 +63,8 @@ class SkillSupervisor:
         self.observation = self.env._observe()
 
     def step(self) -> dict:
+        if self.faulted:
+            raise RuntimeError("Recovery failed; reset the simulator before stepping")
         slot = "run" if self.active == "nav" and self.gait == "run" else self.active
         model, normalizer = self.slots[slot]
         action, _ = model.predict(normalizer.normalize_obs(self.observation[None, :]), deterministic=True)
@@ -82,7 +87,11 @@ class SkillSupervisor:
             self.command("stand")
         elif truncated:
             self.events.append(f"failed:{self.active}")
-            self.command("stand")
+            if self.active == "recover":
+                self.faulted = True
+                self.env.data.ctrl[:] = 0.0
+            else:
+                self.command("stand")
         return {**info, "supervisor_mode": self.active, "events": self.events.copy(),
                 "physical_terminated": terminated}
 
