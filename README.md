@@ -15,13 +15,14 @@ PPO and adversarial motion priors (AMP).
 
 ## CPU MuJoCo walking
 
-The [`mujoco_rl/`](mujoco_rl/README.md) package trains a 12-joint forward
-walking policy on CPU with native MuJoCo and PPO. It has a separate Python
-environment and does not require Isaac Sim or an NVIDIA GPU. Its pinned robot
-model, training commands, evaluation criteria, and replay instructions are in
-the [CPU walking guide](mujoco_rl/README.md). A validated policy and preview
-are in [`mujoco_rl/checkpoints/forward_v1/`](mujoco_rl/checkpoints/forward_v1/README.md).
-Raw training runs under `logs/mujoco_rl/` are excluded from Git.
+The [`mujoco_rl/`](mujoco_rl/README.md) package runs native MuJoCo and PPO on
+CPU, without Isaac Sim or an NVIDIA GPU. Its full-body task controls 23 joints
+from the pinned Asimov model and trains standing before slow forward walking.
+The package also retains the earlier 12-joint walking baseline and its
+[checkpoint and preview](mujoco_rl/checkpoints/forward_v1/README.md). Training
+commands, evaluation criteria, and replay instructions are in the
+[CPU walking guide](mujoco_rl/README.md). Raw runs under `logs/mujoco_rl/` are
+excluded from Git.
 
 ## Quick Install
 
