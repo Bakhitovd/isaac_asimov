@@ -1,0 +1,66 @@
+{
+  "created_utc": "2026-10-05T17:26:00.634784+00:00",
+  "scope": "Selected replays of separately trained neural policies in MuJoCo simulation on the Loudbox CPU.",
+  "presentation_note": "Clips demonstrate selected successful episodes. Report evaluation results alongside videos. Hardware deployment, floor get-up, running, jumping, and object manipulation have not been demonstrated.",
+  "control": "23 actuated joints; policy control at 50 Hz; whole-body joint-position targets.",
+  "holdout_results": {
+    "slow_walking": {
+      "successes": 43,
+      "episodes": 50
+    },
+    "navigation": {
+      "successes": 44,
+      "episodes": 50
+    },
+    "squatting": {
+      "successes": 47,
+      "episodes": 50
+    },
+    "prepared_lean_balance": {
+      "successes": 44,
+      "episodes": 50,
+      "tilt_range_degrees": [
+        18,
+        25
+      ]
+    }
+  },
+  "clips": [
+    {
+      "file": "01_slow_walking_selected_success.mp4",
+      "title": "Slow full-body walking",
+      "seed": 10006,
+      "source": "mujoco_rl/checkpoints/full_body_v1/preview.mp4"
+    },
+    {
+      "file": "02_waypoint_navigation_selected_success.mp4",
+      "title": "Walk to a waypoint and stop",
+      "seed": 2000800000,
+      "source": "logs/mujoco_rl/skills_campaign_v1/revision_2/videos/nav_baseline_success_seed2000800000.mp4"
+    },
+    {
+      "file": "03_squatting_selected_success.mp4",
+      "title": "Repeated squatting and standing",
+      "seed": 2001000000,
+      "source": "logs/mujoco_rl/skills_campaign_v1/revision_2/videos/squat_baseline_success_seed2001000000.mp4"
+    },
+    {
+      "file": "04_prepared_lean_balance_recovery_selected_success.mp4",
+      "title": "Balance recovery from a prepared lean; floor get-up remains unproven",
+      "seed": 2000600000,
+      "source": "logs/mujoco_rl/skills_campaign_v1/revision_2/videos/tilt_baseline_success_seed2000600000.mp4"
+    },
+    {
+      "file": "failure_examples/navigation_failure.mp4",
+      "title": "Navigation failure example",
+      "seed": 2000800028,
+      "source": "logs/mujoco_rl/skills_campaign_v1/revision_2/videos/nav_baseline_failure_seed2000800028.mp4"
+    },
+    {
+      "file": "failure_examples/squat_failure.mp4",
+      "title": "Squat failure example",
+      "seed": 2001000002,
+      "source": "logs/mujoco_rl/skills_campaign_v1/revision_2/videos/squat_baseline_failure_seed2001000002.mp4"
+    }
+  ]
+}

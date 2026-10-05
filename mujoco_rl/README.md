@@ -1,5 +1,12 @@
 # CPU MuJoCo forward walking
 
+## Simulation demos
+
+The [demo collection](demos/2026-10-05/README.md) includes walking, waypoint
+navigation, squatting, and prepared-lean balance recovery, with evaluation
+records and a downloadable ZIP. These are selected simulation replays of
+separate trained policies.
+
 ## Full-body standing and walking
 
 The new `full_body_*` modules use the pinned `third_party/asimov-1` MuJoCo

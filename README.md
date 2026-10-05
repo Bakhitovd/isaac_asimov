@@ -27,6 +27,14 @@ are in [`mujoco_rl/checkpoints/full_body_v1/`](mujoco_rl/checkpoints/full_body_v
 The [multi-skill training guide](mujoco_rl/MULTI_SKILL.md) describes the
 next flat-ground navigation, squat, recovery, running, and jumping stages.
 
+### Simulation demos
+
+Watch the [walking, waypoint navigation, squatting, and balance-recovery
+demos](mujoco_rl/demos/2026-10-05/README.md), or [download the demo
+bundle](mujoco_rl/demos/2026-10-05/demo_bundle.zip?raw=true). The presentation
+includes recorded success rates, evaluation evidence, and failure examples.
+All results are simulation-only.
+
 ## Quick Install
 
 For a brand-new machine with no existing Isaac Lab setup, run the install
