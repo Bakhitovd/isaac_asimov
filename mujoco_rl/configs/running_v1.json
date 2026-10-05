@@ -1,0 +1,40 @@
+{
+  "contract": "asimov_running_v1",
+  "action_scale": 0.25,
+  "workers": 8,
+  "rollout_steps": 768,
+  "batch_size": 512,
+  "epochs": 4,
+  "learning_rate": 3e-05,
+  "clip_range": 0.1,
+  "target_kl": 0.015,
+  "gamma": 0.995,
+  "max_grad_norm": 1.0,
+  "warmup_rollouts": 2,
+  "initial_std": 0.15,
+  "evaluation_interval": 100000,
+  "development_episodes": 20,
+  "block_steps": 1000000,
+  "maximum_steps": 10000000,
+  "maximum_hours": 72,
+  "qualification_hours": 6,
+  "seeds": [
+    44,
+    45
+  ],
+  "exploration_settings": [
+    0.08,
+    0.15
+  ],
+  "rewards": {
+    "tracking": 3.0,
+    "upright": 1.0,
+    "flight": 0.2,
+    "slip": -4.0,
+    "lateral": -1.5,
+    "action_rate": -0.15,
+    "action_accel": -0.05,
+    "effort": -0.03,
+    "fall": -100.0
+  }
+}

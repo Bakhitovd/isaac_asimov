@@ -101,15 +101,20 @@ class FullBodyEnv(gym.Env[np.ndarray, np.ndarray]):
         self.task = task
         self.render_mode = render_mode
         self.randomize = randomize
+        self.randomization_strength = 1.0
 
         spec = mujoco.MjSpec.from_file(str(XML_PATH))
         if support_contacts:
+            # The added wrist pads support recovery against the floor. Keep
+            # them out of the robot's own collision set: otherwise a harmless
+            # arm swing can hit the hip pad and invalidate a whole episode.
+            spec.geom("floor").conaffinity |= 2
             for side in ("left", "right"):
                 wrist = spec.body(f"{side}_wrist_yaw_link")
                 wrist.add_geom(name=f"{side}_wrist_support_collision",
                                type=mujoco.mjtGeom.mjGEOM_SPHERE,
                                pos=[0.0, 0.0, -0.025], size=[0.025, 0.0, 0.0],
-                               contype=1, conaffinity=1,
+                               contype=2, conaffinity=0,
                                friction=[0.8, 0.005, 0.0001])
         for name in JOINT_NAMES:
             actuator = spec.add_actuator(name=f"{name}_motor")
@@ -178,15 +183,16 @@ class FullBodyEnv(gym.Env[np.ndarray, np.ndarray]):
                                self.data.qpos[self.qpos_ids] - STANDING_POSE,
                                self.data.qvel[self.qvel_ids]))
 
-    def _observe(self) -> np.ndarray:
+    def _observe(self, advance_sensors: bool = True) -> np.ndarray:
         raw = self._raw_sensors()
-        self.sensor_buffer.append(raw)
+        if advance_sensors:
+            self.sensor_buffer.append(raw)
         sensed = self.sensor_buffer[-1 - self.sensor_lag].copy()
         if self.randomize:
-            sensed[:3] += self.np_random.normal(0, 0.01, 3)
-            sensed[3:6] += self.np_random.normal(0, 0.01, 3)
-            sensed[6:6 + self.nj] += self.np_random.normal(0, 0.005, self.nj)
-            sensed[6 + self.nj:] += self.np_random.normal(0, 0.05, self.nj)
+            sensed[:3] += self.np_random.normal(0, 0.01 * self.randomization_strength, 3)
+            sensed[3:6] += self.np_random.normal(0, 0.01 * self.randomization_strength, 3)
+            sensed[6:6 + self.nj] += self.np_random.normal(0, 0.005 * self.randomization_strength, self.nj)
+            sensed[6 + self.nj:] += self.np_random.normal(0, 0.05 * self.randomization_strength, self.nj)
         obs = np.concatenate((sensed[:3] * 0.25, sensed[3:6],
                               [0.2 if self.task == "walk" else 0.0],
                               sensed[6:6 + self.nj], sensed[6 + self.nj:] * 0.1,
@@ -228,11 +234,20 @@ class FullBodyEnv(gym.Env[np.ndarray, np.ndarray]):
         self.kd_scale = self.np_random.uniform(0.8, 1.2) if self.randomize else 1.0
         self.action_lag = int(self.np_random.integers(0, 3)) if self.randomize else 0
         self.sensor_lag = int(self.np_random.integers(0, 3)) if self.randomize else 0
+        strength = self.randomization_strength
+        if self.randomize and strength != 1.0:
+            self.model.body_mass[:] = self.base_mass + strength * (self.model.body_mass - self.base_mass)
+            self.model.geom_friction[:] = self.foot_friction + strength * (self.model.geom_friction - self.foot_friction)
+            mujoco.mj_setConst(self.model, self.data)
+            self.kp_scale = 1.0 + strength * (self.kp_scale - 1.0)
+            self.kd_scale = 1.0 + strength * (self.kd_scale - 1.0)
+            self.action_lag = min(self.action_lag, round(2 * strength))
+            self.sensor_lag = min(self.sensor_lag, round(2 * strength))
         self.data.qpos[:3] = (0.0, 0.0, 0.639)
         roll, pitch = self.np_random.uniform(-0.035, 0.035, 2) if self.randomize else (0.0, 0.0)
-        mujoco.mju_euler2Quat(self.data.qpos[3:7], np.array([roll, pitch, 0.0]), "xyz")
+        mujoco.mju_euler2Quat(self.data.qpos[3:7], np.array([roll, pitch, 0.0]) * self.randomization_strength, "xyz")
         deviation = self.np_random.uniform(-0.02, 0.02, self.nj) if self.randomize else 0.0
-        self.data.qpos[self.qpos_ids] = np.clip(STANDING_POSE + deviation,
+        self.data.qpos[self.qpos_ids] = np.clip(STANDING_POSE + deviation * self.randomization_strength,
                                                 self.joint_ranges[:, 0], self.joint_ranges[:, 1])
         self.data.qvel[:] = 0.0
         self.data.ctrl[:] = 0.0
