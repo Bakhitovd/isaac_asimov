@@ -42,5 +42,7 @@ needed for this presentation are included here.
 
 The published slow-walking [checkpoint and normalization
 statistics](../../checkpoints/full_body_v1/README.md) are also in the repository.
+The [waypoint navigation policy and matching normalization
+statistics](../../checkpoints/nav/README.md) are available under `checkpoints/nav/`.
 See the [multi-skill guide](../../MULTI_SKILL.md) for training and evaluation
 commands and the [running report](../../RUNNING.md) for current limitations.
