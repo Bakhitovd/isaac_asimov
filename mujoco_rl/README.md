@@ -10,6 +10,9 @@ separate trained policies.
 The [qualified waypoint navigation policy](checkpoints/nav/README.md) and its
 matching normalization statistics are included in Git under `checkpoints/nav/`.
 
+The [continuous walking and turning guide](COMMAND_WALK.md) covers training one
+policy to walk forward, steer left/right, turn on the spot, and stop on command.
+
 ## Full-body standing and walking
 
 The new `full_body_*` modules use the pinned `third_party/asimov-1` MuJoCo
