@@ -140,3 +140,5 @@ during PPO training.
 The actor observes simulator linear velocity, heading, and lateral position.
 Those signals will need an estimator or a changed observation design before
 real-robot deployment. This milestone uses a flat, fixed-friction simulation.
+
+See [Command walking v2](COMMAND_WALK_V2.md) for the delay curriculum, pivot rewards, retention checks, and controlled pilot campaign.

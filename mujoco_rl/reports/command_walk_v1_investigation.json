@@ -1,0 +1,228 @@
+{
+  "purpose": "Frozen policy paired diagnostics, not policy qualification",
+  "count_per_family": 10,
+  "families": 7,
+  "seeds": "1001 + family_index * 100000 + index (0..9), stage2 reset in all conditions",
+  "pairing": "Identical initial pose and commands; disabled disturbances consume the same RNG draws; extra initial observation is sampled in every condition",
+  "pre_checkpoint": "seed45/007415808_probe",
+  "final_checkpoint": "seed45/009996288_final",
+  "results": [
+    {
+      "name": "final_half_physics",
+      "passed": 17,
+      "count": 70,
+      "pass_rates": {
+        "forward": 0.4,
+        "left_arc": 0.2,
+        "right_arc": 0.2,
+        "left_pivot": 0.0,
+        "right_pivot": 0.2,
+        "stop": 0.7,
+        "mixed": 0.0
+      },
+      "falls": 0,
+      "mean_observation_clip_fraction": 0.0,
+      "mean_torque_saturation": 9.242827565808932e-05
+    },
+    {
+      "name": "final_paired_nominal",
+      "passed": 41,
+      "count": 70,
+      "pass_rates": {
+        "forward": 0.9,
+        "left_arc": 1.0,
+        "right_arc": 0.3,
+        "left_pivot": 0.3,
+        "right_pivot": 0.3,
+        "stop": 1.0,
+        "mixed": 0.3
+      },
+      "falls": 0,
+      "mean_observation_clip_fraction": 0.0,
+      "mean_torque_saturation": 6.0632948831706596e-05
+    },
+    {
+      "name": "pre_action_delay_only",
+      "passed": 58,
+      "count": 70,
+      "pass_rates": {
+        "forward": 1.0,
+        "left_arc": 0.8,
+        "right_arc": 0.7,
+        "left_pivot": 0.6,
+        "right_pivot": 0.8,
+        "stop": 1.0,
+        "mixed": 0.9
+      },
+      "falls": 0,
+      "mean_observation_clip_fraction": 0.0,
+      "mean_torque_saturation": 3.992901508429459e-05
+    },
+    {
+      "name": "pre_both_delays_only",
+      "passed": 24,
+      "count": 70,
+      "pass_rates": {
+        "forward": 0.2,
+        "left_arc": 0.2,
+        "right_arc": 0.1,
+        "left_pivot": 0.2,
+        "right_pivot": 0.4,
+        "stop": 0.8,
+        "mixed": 0.5
+      },
+      "falls": 2,
+      "mean_observation_clip_fraction": 2.777259972688727e-06,
+      "mean_torque_saturation": 3.9831092765494076e-05
+    },
+    {
+      "name": "pre_gains_only",
+      "passed": 64,
+      "count": 70,
+      "pass_rates": {
+        "forward": 1.0,
+        "left_arc": 1.0,
+        "right_arc": 1.0,
+        "left_pivot": 0.8,
+        "right_pivot": 0.7,
+        "stop": 1.0,
+        "mixed": 0.9
+      },
+      "falls": 0,
+      "mean_observation_clip_fraction": 0.0,
+      "mean_torque_saturation": 0.00026974267968056786
+    },
+    {
+      "name": "pre_half_physics",
+      "passed": 22,
+      "count": 70,
+      "pass_rates": {
+        "forward": 0.2,
+        "left_arc": 0.1,
+        "right_arc": 0.1,
+        "left_pivot": 0.2,
+        "right_pivot": 0.6,
+        "stop": 0.6,
+        "mixed": 0.4
+      },
+      "falls": 3,
+      "mean_observation_clip_fraction": 7.47012854091174e-06,
+      "mean_torque_saturation": 4.0552084881624245e-05
+    },
+    {
+      "name": "pre_mass_friction_only",
+      "passed": 69,
+      "count": 70,
+      "pass_rates": {
+        "forward": 1.0,
+        "left_arc": 1.0,
+        "right_arc": 1.0,
+        "left_pivot": 0.9,
+        "right_pivot": 1.0,
+        "stop": 1.0,
+        "mixed": 1.0
+      },
+      "falls": 0,
+      "mean_observation_clip_fraction": 0.0,
+      "mean_torque_saturation": 0.00024282756580893227
+    },
+    {
+      "name": "pre_no_delays",
+      "passed": 64,
+      "count": 70,
+      "pass_rates": {
+        "forward": 1.0,
+        "left_arc": 1.0,
+        "right_arc": 1.0,
+        "left_pivot": 0.8,
+        "right_pivot": 0.7,
+        "stop": 1.0,
+        "mixed": 0.9
+      },
+      "falls": 0,
+      "mean_observation_clip_fraction": 0.0,
+      "mean_torque_saturation": 0.0002573203194321207
+    },
+    {
+      "name": "pre_noise_only",
+      "passed": 68,
+      "count": 70,
+      "pass_rates": {
+        "forward": 1.0,
+        "left_arc": 1.0,
+        "right_arc": 1.0,
+        "left_pivot": 0.8,
+        "right_pivot": 1.0,
+        "stop": 1.0,
+        "mixed": 1.0
+      },
+      "falls": 0,
+      "mean_observation_clip_fraction": 0.0,
+      "mean_torque_saturation": 0.00023735581188997338
+    },
+    {
+      "name": "pre_paired_nominal",
+      "passed": 69,
+      "count": 70,
+      "pass_rates": {
+        "forward": 1.0,
+        "left_arc": 1.0,
+        "right_arc": 1.0,
+        "left_pivot": 0.9,
+        "right_pivot": 1.0,
+        "stop": 1.0,
+        "mixed": 1.0
+      },
+      "falls": 0,
+      "mean_observation_clip_fraction": 0.0,
+      "mean_torque_saturation": 0.00023839100857734398
+    },
+    {
+      "name": "pre_pushes_only",
+      "passed": 66,
+      "count": 70,
+      "pass_rates": {
+        "forward": 1.0,
+        "left_arc": 1.0,
+        "right_arc": 1.0,
+        "left_pivot": 0.9,
+        "right_pivot": 0.9,
+        "stop": 1.0,
+        "mixed": 0.8
+      },
+      "falls": 0,
+      "mean_observation_clip_fraction": 0.0,
+      "mean_torque_saturation": 0.00023839100857734398
+    },
+    {
+      "name": "pre_sensor_delay_only",
+      "passed": 55,
+      "count": 70,
+      "pass_rates": {
+        "forward": 1.0,
+        "left_arc": 0.8,
+        "right_arc": 0.7,
+        "left_pivot": 0.6,
+        "right_pivot": 0.5,
+        "stop": 1.0,
+        "mixed": 0.9
+      },
+      "falls": 0,
+      "mean_observation_clip_fraction": 0.0,
+      "mean_torque_saturation": 6.359065365276545e-05
+    }
+  ],
+  "confirmed_findings": {
+    "seed44_stop": "Behavioral plateau review at 6266880 set stop_requested; final probe then raised TimeoutError and wrote deadline_or_interrupt. Saved final step count was 6266888. Child exit code 0.",
+    "seed45_stop": "Lifetime step budget exhausted at 9996288, after entering half_physics around 7415808.",
+    "latency": "Half_physics clamps independently sampled action/sensor delays to 0 or 1 policy steps (20ms); each nonzero with probability 2/3. Pre checkpoint: paired nominal 69/70, both delays only 24/70, all half variations 22/70, half variations without delays 64/70.",
+    "retention": "Same nominal diagnostic cases: pre checkpoint 69/70, final checkpoint 41/70. Curriculum does not re-evaluate earlier stages.",
+    "pivot_objective": "Final official 50-case left-pivot panel: 43 drift failures, mean maximum displacement 0.3389m against 0.25m limit. New 10-case panel: all fail only drift, mean displacement 0.3652m, mean step reward about6.53/7. No explicit accumulated displacement reward or input.",
+    "evaluation_cost": "61 seed44 panels and 97 seed45 panels simulated 15250000 and 24245680 evaluation steps respectively, about2.4 evaluation steps per training step."
+  },
+  "limitations": [
+    "Diagnostic conditions use 10 development cases per family, not independent qualification.",
+    "Physics and initial-state RNG streams share one generator in existing environment; comparisons retain stage2 reset and consume disabled perturbation draws to preserve pairing.",
+    "No production training code or checkpoint was changed."
+  ]
+}

@@ -96,7 +96,9 @@ class CommandMonitor(BaseCallback):
                     'evaluation': self.latest, **extra})
 
     def evaluation_progress(self, family, index, step):
-        if self.stop_requested or time.time() >= self.deadline:
+        if time.time() >= self.deadline:
+            self.stop_reason = 'time_budget'
+        if self.stop_reason in {'interrupted', 'time_budget'}:
             raise TimeoutError('Command walking interrupted or campaign deadline reached')
         if time.time() - self.last_heartbeat > 10:
             self.last_heartbeat = time.time()
@@ -213,7 +215,8 @@ def train(args):
         state = model.command_walk_state
         state.setdefault('block_baseline', compact(initial))
         rollout = config['workers'] * config['rollout_steps']
-        available = min(args.steps, config['maximum_steps'] - model.num_timesteps)
+        # This invocation owns a new budget, independent of the checkpoint's age.
+        available = min(args.steps, config['maximum_steps'])
         steps = max(0, available // rollout) * rollout
         if steps:
             model.learn(total_timesteps=steps, reset_num_timesteps=False, callback=callback)
@@ -232,7 +235,7 @@ def train(args):
             p.requires_grad_(True)
         checkpoint = save_bundle(model, norm, args.output, 'interrupted')
         atomic_json(args.output / 'status.json', {'state': 'stopped', 'steps': model.num_timesteps,
-                    'stop_reason': 'deadline_or_interrupt', 'checkpoint': str(checkpoint), 'heartbeat': time.time()})
+                    'stop_reason': callback.stop_reason, 'checkpoint': str(checkpoint), 'heartbeat': time.time()})
     except Exception as error:
         atomic_json(args.output / 'status.json', {'state': 'failed', 'steps': model.num_timesteps,
                     'error': repr(error), 'heartbeat': time.time()})
