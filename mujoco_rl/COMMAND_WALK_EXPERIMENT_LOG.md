@@ -148,3 +148,31 @@ critic adaptation, update size, reward conflicts, or insufficient reference cove
 these regressions. Next review should compare those mechanisms and per-family failure traces
 before choosing a further training change. Do not restart the same campaign or describe the
 saved intermediate policy as holdout-qualified.
+
+## 2026-10-11 20:53 UTC — V4 implementation and launch preparation
+
+Implemented the approved 24-hour staged campaign; see [V4 configuration](COMMAND_WALK_V4.md).
+Fresh transfer and resume are explicit. The first experiment compares current two-rollout
+initialization, preserved critic/return statistics, and twenty-rollout critic calibration,
+using seeds 44/45 and equal actor-enabled budgets. Calibration steps are reported separately.
+The comparison tests initialization packages, not independent causal effects of critic and
+normalization changes.
+
+Later stages are implemented behind behavioral gates: balanced turning/pivot/braking
+specialists, a bounded heading-reward comparison only for confirmed heading-dominated plateaus,
+teacher distillation with student-state aggregation, transition refinement, and independent
+nominal/60-second-sequence qualification. If all initialization packages fail retention, the
+campaign stops before training specialists. No delays or physics randomization are added.
+
+Validation: 202 tests passed. PPO smoke training recorded 256 calibration steps and 512 actor
+steps; resume reached 640 actor steps without repeating calibration. Distillation completed
+four small-data rounds and an optimizer/data resume check, and correctly rejected qualification
+with one evaluation case per motion. An expired-job test saved a resume bundle without actor
+updates. Nominal replay rendered successfully; the old baseline failed the single 60-second
+sequence smoke case. These checks validate implementation paths, not a newly qualified policy.
+
+Runtime output is `logs/mujoco_rl/command_walk_v4/`, with an automatic `campaign_journal.md`
+for stage transitions and stop decisions, persisted deadlines in `campaign.json`, and per-job
+attempt logs, evaluations, and immutable policy/statistics pairs. The live tmux session is
+`asimov_command_walk_v4`. The implementation revision is recorded at campaign launch.
+No new motion-learning result is claimed at this preparation milestone.

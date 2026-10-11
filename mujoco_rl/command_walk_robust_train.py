@@ -39,12 +39,24 @@ def retention_passed(reference, report, tolerance=0.10):
     )
 
 
-def create_model(checkpoint, variant="aligned", seed=44, workers=8, level=0, rollout_steps=768, model_class=RunningPPO):
+def create_model(
+    checkpoint,
+    variant="aligned",
+    seed=44,
+    workers=8,
+    level=0,
+    rollout_steps=768,
+    model_class=RunningPPO,
+    transfer=False,
+    preserve_critic=False,
+    warmup_rollouts=2,
+    env_factory=None,
+):
     source = model_class.load(checkpoint, device="cpu")
     contract = getattr(source, "command_walk_contract", {})
     if contract.get("contract") not in ("asimov_command_walk_v1", CONTRACT):
         raise ValueError("Use a v1/v2 command walking checkpoint")
-    resume = contract["contract"] == CONTRACT
+    resume = contract["contract"] == CONTRACT and not transfer
     if resume and contract["variant"] != variant:
         raise ValueError("Cannot change variant on resume")
     config = {
@@ -57,7 +69,8 @@ def create_model(checkpoint, variant="aligned", seed=44, workers=8, level=0, rol
     }
     if resume and (contract["workers"] != workers or contract["rollout_steps"] != rollout_steps):
         raise ValueError("Resume must preserve rollout shape")
-    factories = [lambda: Monitor(RobustCommandEnv(level=level, variant=variant, training=True)) for _ in range(workers)]
+    factory = env_factory or (lambda: RobustCommandEnv(level=level, variant=variant, training=True))
+    factories = [lambda: Monitor(factory()) for _ in range(workers)]
     base = SubprocVecEnv(factories, start_method="forkserver") if workers > 1 else DummyVecEnv(factories)
     try:
         if resume:
@@ -87,16 +100,22 @@ def create_model(checkpoint, variant="aligned", seed=44, workers=8, level=0, rol
                 },
             )
             _warm_start(model, norm, checkpoint)
-            with torch.no_grad():
-                model.policy.value_net.weight.zero_()
-                model.policy.value_net.bias.zero_()
+            if preserve_critic:
+                with _stats_path(checkpoint).open("rb") as handle:
+                    old_norm = pickle.load(handle)
+                norm.ret_rms = copy.deepcopy(old_norm.ret_rms)
+                norm.returns[:] = 0
+            else:
+                with torch.no_grad():
+                    model.policy.value_net.weight.zero_()
+                    model.policy.value_net.bias.zero_()
             model.num_timesteps = source.num_timesteps
             model.command_walk_contract = config
             model.command_walk_state = dict(
                 level=level,
                 pass_streak=0,
                 regression_streak=0,
-                warmup_until=model.num_timesteps + 2 * workers * rollout_steps,
+                warmup_until=model.num_timesteps + warmup_rollouts * workers * rollout_steps,
                 best_by_level={},
                 last_evaluation=model.num_timesteps,
                 last_full=model.num_timesteps,
