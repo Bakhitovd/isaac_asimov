@@ -83,3 +83,36 @@ the configured retention/rollback gates remain active. No new policy is qualifie
 Live view: `tmux attach -t asimov_command_walk_v3`. Runtime evidence is in
 `logs/mujoco_rl/command_walk_v3/`: `status.json`, per-trial `status.json`, `evaluations/`,
 `updates.jsonl`, and, when available, `comparison.json` and holdout reports.
+
+## 2026-10-11 19:07 UTC — Seed 44 complete; seed 45 still running
+
+Campaign elapsed time: 1.83 hours. Both seed-44 pilots completed 497,664 additional steps.
+Both seed-45 pilots reached 276,480 additional steps and were evaluating; their latest completed
+full panels were at 165,888 additional steps. All results below use 50 development cases per
+family, with nominal physics. No holdout qualification has occurred.
+
+| Motion | Baseline | Best retained protected 44 | Final control 44 | Final protected 44 | Latest full control 45 | Latest full protected 45 |
+|---|---:|---:|---:|---:|---:|---:|
+| Forward | 98% | 100% | 100% | 98% | 100% | 90% |
+| Walking left turn | 92% | 90% | 88% | 98% | 80% | 82% |
+| Walking right turn | 98% | 98% | 92% | 100% | 98% | 98% |
+| Left pivot | 84% | 98% | 76% | 94% | 78% | 78% |
+| Right pivot | 98% | 94% | 98% | 82% | 94% | 98% |
+| Stop | 100% | 100% | 100% | 100% | 100% | 100% |
+| Mixed sequence | 92% | 94% | 86% | 68% | 92% | 88% |
+
+The protected seed-44 checkpoint at lifetime step 6,340,608 is eligible for extension on that
+seed: its weakest family improved from 84% to 90%, and no family declined beyond the configured
+six-percentage-point tolerance. It is saved at
+`logs/mujoco_rl/command_walk_v3/pilot_protected_44/checkpoints/006340608_full/policy.zip`,
+with `policy_vecnormalize.pkl` alongside it. It does not meet nominal qualification thresholds.
+
+Later protected seed-44 updates regressed, especially right pivots and mixed commands. The final
+checkpoint is therefore not the selected candidate. Control seed 44 rolled back once to its
+starting checkpoint, reduced learning rate to 1.5e-5, and produced no retained improvement;
+its selected candidate remains the baseline.
+
+Decision: preserve the intermediate protected checkpoint and finish seed 45 before deciding on
+extension. The improvement has not replicated yet. Seed-45 full panels currently show regression
+in both approaches. Campaign evidence: `command_walk_v3/comparison.json` and per-trial evaluation
+and rollback records. Protection is promising in one checkpoint, not established as a reliable fix.
