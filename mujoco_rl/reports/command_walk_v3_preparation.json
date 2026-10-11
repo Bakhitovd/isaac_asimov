@@ -1,0 +1,289 @@
+{
+  "source": "/home/ailevate/isaac_asimov/logs/mujoco_rl/command_walk_v1/seed45/checkpoints/005953536_probe/policy.zip",
+  "policy_sha256": "51032052f06ee6fc863e2a1bfe5184dcb04f10988321eb7796d30bcc1894249e",
+  "normalization_sha256": "2576182944eec959f10f416ea630485b89bca21ad4a2bf55364da86a5c338344",
+  "baseline_expected": {
+    "contract": "asimov_command_walk_v2",
+    "level": 0,
+    "profile": "nominal",
+    "seed_start": 1001,
+    "training_steps": 5953536,
+    "families": {
+      "forward": {
+        "pass_rate": 0.98,
+        "success_count": 49,
+        "count": 50,
+        "wilson_95": [
+          0.8950455641036255,
+          0.9964607407283537
+        ],
+        "failure_counts": {
+          "segment0/lateral_max": 1
+        },
+        "mean_violation": 6.238713335930786e-05,
+        "mean_seconds": 12.0,
+        "metrics": {
+          "segment1/speed_error": 0.0015295378398356644,
+          "segment0/yaw_error": 0.04056275998089118,
+          "slip": 0.010689832642959687,
+          "segment1/stop_yaw": 0.006690469419488032,
+          "segment1/stop_speed": 0.007937605000970316,
+          "segment0/lateral_max": 0.17525826147705353,
+          "segment1/heading_rms": 0.07253477215451057,
+          "segment0/speed_error": 0.009502039706511499,
+          "segment0/heading_rms": 0.07791221598788547,
+          "segment0/progress_error": 0.07993516706326118,
+          "segment1/heading_max": 0.0751379014331622,
+          "segment1/yaw_error": 0.002477528636662157,
+          "segment0/heading_max": 0.10206796831275863
+        }
+      },
+      "left_arc": {
+        "pass_rate": 0.92,
+        "success_count": 46,
+        "count": 50,
+        "wilson_95": [
+          0.8116175308165755,
+          0.9684504859114064
+        ],
+        "failure_counts": {
+          "segment0/yaw_error": 1,
+          "segment0/heading_rms": 4,
+          "segment0/heading_max": 1,
+          "segment1/heading_rms": 4
+        },
+        "mean_violation": 0.006387532893668869,
+        "mean_seconds": 12.0,
+        "metrics": {
+          "segment1/speed_error": 0.0013567686401624612,
+          "segment0/yaw_error": 0.05388527927114433,
+          "slip": 0.01364084303657799,
+          "segment1/stop_yaw": 0.004874990040948379,
+          "segment1/stop_speed": 0.007668643002179332,
+          "segment1/heading_rms": 0.05705550864826362,
+          "segment0/speed_error": 0.013139204794567845,
+          "segment0/heading_rms": 0.06541609135819111,
+          "segment1/heading_max": 0.0583120476894221,
+          "segment1/yaw_error": 0.0015320528317007884,
+          "segment0/heading_max": 0.09253376227421502
+        }
+      },
+      "right_arc": {
+        "pass_rate": 0.98,
+        "success_count": 49,
+        "count": 50,
+        "wilson_95": [
+          0.8950455641036255,
+          0.9964607407283537
+        ],
+        "failure_counts": {
+          "segment1/heading_rms": 1
+        },
+        "mean_violation": 0.00031879177165119695,
+        "mean_seconds": 12.0,
+        "metrics": {
+          "segment1/speed_error": 0.001355849016866758,
+          "segment0/yaw_error": 0.04177641015119329,
+          "slip": 0.017700189864010115,
+          "segment1/stop_yaw": 0.004846873362656545,
+          "segment1/stop_speed": 0.007151028135815441,
+          "segment1/heading_rms": 0.06176888364889735,
+          "segment0/speed_error": 0.009597742863509576,
+          "segment0/heading_rms": 0.06044078040101828,
+          "segment1/heading_max": 0.0632837060228296,
+          "segment1/yaw_error": 0.0015900159135471181,
+          "segment0/heading_max": 0.08038136915970845
+        }
+      },
+      "left_pivot": {
+        "pass_rate": 0.84,
+        "success_count": 42,
+        "count": 50,
+        "wilson_95": [
+          0.7148578393696541,
+          0.9166257932196644
+        ],
+        "failure_counts": {
+          "segment1/heading_rms": 7,
+          "segment0/heading_rms": 1,
+          "segment1/stop_speed": 5,
+          "segment1/stop_yaw": 5,
+          "segment0/pivot_drift": 1
+        },
+        "mean_violation": 0.014948732494703737,
+        "mean_seconds": 12.0,
+        "metrics": {
+          "segment1/speed_error": 0.0018368500089050602,
+          "segment0/yaw_error": 0.05358294625540601,
+          "slip": 0.012547775222759268,
+          "segment1/stop_yaw": 0.020601258789885613,
+          "segment1/stop_speed": 0.015871586247323603,
+          "segment1/heading_rms": 0.05333203123954264,
+          "segment0/speed_error": 0.008318671312126921,
+          "segment0/pivot_drift": 0.19219709932877538,
+          "segment0/heading_rms": 0.046012796125787035,
+          "segment1/heading_max": 0.055824930676655456,
+          "segment1/yaw_error": 0.0031441128202461337,
+          "segment0/heading_max": 0.06604945602063525
+        }
+      },
+      "right_pivot": {
+        "pass_rate": 0.98,
+        "success_count": 49,
+        "count": 50,
+        "wilson_95": [
+          0.8950455641036255,
+          0.9964607407283537
+        ],
+        "failure_counts": {
+          "segment0/heading_rms": 1
+        },
+        "mean_violation": 9.697997711820783e-05,
+        "mean_seconds": 12.0,
+        "metrics": {
+          "segment1/speed_error": 0.001335643691346012,
+          "segment0/yaw_error": 0.051910929445643045,
+          "slip": 0.016855464452735558,
+          "segment1/stop_yaw": 0.004560769489170724,
+          "segment1/stop_speed": 0.008153879992465321,
+          "segment1/heading_rms": 0.10297349415629126,
+          "segment0/speed_error": 0.009231534817318974,
+          "segment0/pivot_drift": 0.12115011854856739,
+          "segment0/heading_rms": 0.09408078815044497,
+          "segment1/heading_max": 0.10406949171602294,
+          "segment1/yaw_error": 0.001746049117157361,
+          "segment0/heading_max": 0.12684407299655928
+        }
+      },
+      "stop": {
+        "pass_rate": 1.0,
+        "success_count": 50,
+        "count": 50,
+        "wilson_95": [
+          0.928652400866645,
+          1.0
+        ],
+        "failure_counts": {},
+        "mean_violation": 0.0,
+        "mean_seconds": 12.0,
+        "metrics": {
+          "segment1/speed_error": 0.0013223603201789505,
+          "segment0/yaw_error": 0.04276171148836861,
+          "slip": 0.006486718682368152,
+          "segment1/stop_yaw": 0.006931090184338906,
+          "segment1/stop_speed": 0.00795922838312698,
+          "segment0/lateral_max": 0.051921043906407026,
+          "segment1/heading_rms": 0.04803647380482757,
+          "segment0/speed_error": 0.009364573221006206,
+          "segment0/heading_rms": 0.0560061384372097,
+          "segment0/progress_error": 0.05442617118289389,
+          "segment1/heading_max": 0.053883634909820684,
+          "segment1/yaw_error": 0.001859470158154103,
+          "segment0/heading_max": 0.06973030343141187
+        }
+      },
+      "mixed": {
+        "pass_rate": 0.92,
+        "success_count": 46,
+        "count": 50,
+        "wilson_95": [
+          0.8116175308165755,
+          0.9684504859114064
+        ],
+        "failure_counts": {
+          "segment1/yaw_error": 2,
+          "segment4/yaw_error": 2,
+          "segment5/yaw_error": 1
+        },
+        "mean_violation": 0.0002264461428792166,
+        "mean_seconds": 28.0,
+        "metrics": {
+          "segment3/speed_error": 0.009605676112338944,
+          "segment2/heading_max": 0.06945197440496877,
+          "segment3/heading_max": 0.06958810599583445,
+          "segment1/speed_error": 0.01331703356520993,
+          "segment0/yaw_error": 0.04399371061256112,
+          "segment2/speed_error": 0.009844892066009237,
+          "segment3/yaw_error": 0.04274576884216624,
+          "segment4/heading_rms": 0.04220581398377097,
+          "segment6/yaw_error": 0.0015131654109864661,
+          "slip": 0.016308334798171488,
+          "segment6/stop_speed": 0.00817576791355358,
+          "segment6/stop_yaw": 0.0038036891646737736,
+          "segment0/lateral_max": 0.052932488424072,
+          "segment5/yaw_error": 0.0558626770039866,
+          "segment6/heading_rms": 0.06964978091524145,
+          "segment1/heading_rms": 0.041804251286402486,
+          "segment0/speed_error": 0.00950788251048483,
+          "segment0/heading_rms": 0.05780910698117189,
+          "segment0/progress_error": 0.057145022355269276,
+          "segment1/heading_max": 0.05918490288195279,
+          "segment1/yaw_error": 0.0544501067246376,
+          "segment5/heading_rms": 0.05317762859536664,
+          "segment6/speed_error": 0.0013076086425263486,
+          "segment6/heading_max": 0.07029141085763702,
+          "segment5/pivot_drift": 0.06290246913501298,
+          "segment5/speed_error": 0.009191705215491747,
+          "segment4/pivot_drift": 0.14969461193026834,
+          "segment4/speed_error": 0.008596628240672395,
+          "segment2/progress_error": 0.027086825355190646,
+          "segment2/yaw_error": 0.04479329570949549,
+          "segment3/heading_rms": 0.05721480460615716,
+          "segment2/heading_rms": 0.054440100072041274,
+          "segment4/heading_max": 0.059812279677934926,
+          "segment4/yaw_error": 0.058411590484176316,
+          "segment2/lateral_max": 0.1251960255687878,
+          "segment0/heading_max": 0.07257604500782261,
+          "segment5/heading_max": 0.07577813702240276
+        }
+      }
+    },
+    "minimum_pass_rate": 0.84,
+    "mean_pass_rate": 0.9457142857142856,
+    "mean_violation": 0.0031486957733400764,
+    "criterion_met": false
+  },
+  "replay": {
+    "seed": 301001,
+    "family": "left_pivot",
+    "failures": [
+      "segment1/heading_rms"
+    ],
+    "metrics": {
+      "slip": 0.009557890228357206,
+      "segment0/speed_error": 0.0076819136538139425,
+      "segment0/yaw_error": 0.06494976252084884,
+      "segment0/heading_rms": 0.1742095382053397,
+      "segment0/heading_max": 0.21832974025774088,
+      "segment0/pivot_drift": 0.07125845307876899,
+      "segment1/speed_error": 0.003954447796639479,
+      "segment1/yaw_error": 0.004336007324644685,
+      "segment1/heading_rms": 0.2080345251749386,
+      "segment1/heading_max": 0.21087244701753316,
+      "segment1/stop_speed": 0.012548783532876836,
+      "segment1/stop_yaw": 0.016872603764150895
+    },
+    "conclusion": "This replay failed post-turn heading RMS (11.92 degrees, limit 10). Pivot drift was 0.071 m (limit 0.25), stop speed 0.0125 m/s (limit 0.05), and stop yaw 0.0169 rad/s (limit 0.10). Do not infer that all left-pivot failures are drift failures."
+  },
+  "reference": {
+    "successful_episodes": 56,
+    "excluded_episodes": 1,
+    "frames": 7168,
+    "sha256": "4f80f83173178d5db5cd3a18aa2ed27cd9ff9e457d96a0c1a863d479ba56e2f3",
+    "seed_range_start": 2000001
+  },
+  "experiment": {
+    "physics": "nominal, no artificial delays",
+    "reward": "original, unchanged",
+    "seeds": [
+      44,
+      45
+    ],
+    "additional_steps_per_trial": 497664,
+    "control_weight": 0,
+    "protected_weight": 0.1,
+    "status": "Baseline reproduced; paired nominal experiment ready to launch"
+  },
+  "later_stages": "Reward and transition changes depend on measured failures. History and robustness wait for nominal qualification.",
+  "baseline_reproduced": true
+}

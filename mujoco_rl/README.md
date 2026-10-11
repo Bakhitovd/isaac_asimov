@@ -142,3 +142,5 @@ Those signals will need an estimator or a changed observation design before
 real-robot deployment. This milestone uses a flat, fixed-friction simulation.
 
 See [Command walking v2](COMMAND_WALK_V2.md) for the delay curriculum, pivot rewards, retention checks, and controlled pilot campaign.
+
+See [Command walking v3](COMMAND_WALK_V3.md) for nominal-only walking/turning/stopping experiments with selective reference-policy protection and separate robustness qualification.

@@ -39,8 +39,8 @@ def retention_passed(reference, report, tolerance=0.10):
     )
 
 
-def create_model(checkpoint, variant="aligned", seed=44, workers=8, level=0, rollout_steps=768):
-    source = RunningPPO.load(checkpoint, device="cpu")
+def create_model(checkpoint, variant="aligned", seed=44, workers=8, level=0, rollout_steps=768, model_class=RunningPPO):
+    source = model_class.load(checkpoint, device="cpu")
     contract = getattr(source, "command_walk_contract", {})
     if contract.get("contract") not in ("asimov_command_walk_v1", CONTRACT):
         raise ValueError("Use a v1/v2 command walking checkpoint")
@@ -67,7 +67,7 @@ def create_model(checkpoint, variant="aligned", seed=44, workers=8, level=0, rol
             base.env_method("set_level", model.command_walk_state["level"])
         else:
             norm = VecNormalize(base, gamma=config["gamma"])
-            model = RunningPPO(
+            model = model_class(
                 "MlpPolicy",
                 norm,
                 device="cpu",
@@ -120,6 +120,8 @@ class RobustMonitor(BaseCallback):
         self.stop_reason, self.stop_requested, self.cancelled = "step_budget", False, False
         self.latest, self.last_heartbeat = None, 0.0
         self.last_update, self.bad_updates = -1, 0
+        self.quick_interval, self.full_interval = 100_000, 250_000
+        self.retention_tolerance = 0.10
 
     def stop(self, reason):
         self.stop_reason, self.stop_requested = reason, True
@@ -172,7 +174,7 @@ class RobustMonitor(BaseCallback):
         if full:
             state["last_full"] = self.model.num_timesteps
             state.setdefault("retention_reference", compact(nominal))
-            retained = retention_passed(state["retention_reference"], nominal)
+            retained = retention_passed(state["retention_reference"], nominal, self.retention_tolerance)
             result["retained"] = self.latest["retained"] = retained
             state["regression_streak"] = 0 if retained else state["regression_streak"] + 1
             eligible = retained and nominal["criterion_met"]
@@ -256,9 +258,9 @@ class RobustMonitor(BaseCallback):
             self.rollback()
         if state.pop("needs_entry_probe", False):
             self.probe("entry", full=False)
-        if self.model.num_timesteps - state["last_evaluation"] >= 100_000:
+        if self.model.num_timesteps - state["last_evaluation"] >= self.quick_interval:
             result, _ = self.probe("quick", full=False)
-            due = self.model.num_timesteps - state["last_full"] >= 250_000
+            due = self.model.num_timesteps - state["last_full"] >= self.full_interval
             promising = result["nominal"]["criterion_met"] and result["current"]["criterion_met"]
             if due or promising:
                 result, _ = self.probe("full", full=True)
@@ -302,16 +304,47 @@ def train(args):
     torch.set_num_threads(1)
     if args.steps < 0 or args.hours <= 0 or not np.isfinite(args.hours) or args.workers not in range(1, 9):
         raise ValueError("Invalid run budget")
+    if (
+        getattr(args, "quick_interval", 100_000) < 1
+        or getattr(args, "full_interval", 250_000) < 1
+        or not 0 <= getattr(args, "retention_tolerance", 0.10) <= 1
+    ):
+        raise ValueError("Invalid monitoring configuration")
     args.output.mkdir(parents=True, exist_ok=False)
     atomic_json(args.output / "status.json", dict(state="starting", pid=os.getpid(), heartbeat=time.time()))
+    reference = getattr(args, "reference", None)
+    weight = getattr(args, "reference_weight", 0.0)
+    if weight and reference is None:
+        raise ValueError("Protection requires a reference dataset")
+    from .command_walk_reference import ReferencePPO
+
     model, norm, resume, rng = create_model(
-        args.checkpoint, args.variant, args.seed, args.workers, args.level, args.rollout_steps
+        args.checkpoint,
+        args.variant,
+        args.seed,
+        args.workers,
+        args.level,
+        args.rollout_steps,
+        model_class=ReferencePPO if reference else RunningPPO,
     )
+    if reference:
+        reference_contract = dict(sha256=sha256(reference), weight=weight)
+        if resume and model.command_walk_contract.get("reference") != reference_contract:
+            norm.close()
+            raise ValueError("Resume must preserve reference dataset and weight")
+        model.attach_reference(reference, norm, weight, args.seed + model.num_timesteps)
+        model.command_walk_contract["reference"] = reference_contract
+    elif getattr(model, "reference_weight", 0.0):
+        norm.close()
+        raise ValueError("Protected checkpoint requires its reference dataset on resume")
     start = model.num_timesteps
     model._diagnostics_path = args.output / "updates.jsonl"
     monitor = RobustMonitor(
         args.output, start, time.time() + args.hours * 3600, args.pilot, args.quick_count, args.full_count
     )
+    monitor.quick_interval = getattr(args, "quick_interval", 100_000)
+    monitor.full_interval = getattr(args, "full_interval", 250_000)
+    monitor.retention_tolerance = getattr(args, "retention_tolerance", 0.10)
     monitor.init_callback(model)
     atomic_json(
         args.output / "provenance.json",
@@ -394,6 +427,11 @@ def main():
     p.add_argument("--rollout-steps", type=int, default=768)
     p.add_argument("--quick-count", type=int, default=10)
     p.add_argument("--full-count", type=int, default=50)
+    p.add_argument("--reference", type=Path)
+    p.add_argument("--reference-weight", type=float, default=0.0)
+    p.add_argument("--quick-interval", type=int, default=100_000)
+    p.add_argument("--full-interval", type=int, default=250_000)
+    p.add_argument("--retention-tolerance", type=float, default=0.10)
     train(p.parse_args())
 
 
