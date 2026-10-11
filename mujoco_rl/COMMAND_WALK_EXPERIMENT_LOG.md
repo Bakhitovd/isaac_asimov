@@ -116,3 +116,35 @@ Decision: preserve the intermediate protected checkpoint and finish seed 45 befo
 extension. The improvement has not replicated yet. Seed-45 full panels currently show regression
 in both approaches. Campaign evidence: `command_walk_v3/comparison.json` and per-trial evaluation
 and rollback records. Protection is promising in one checkpoint, not established as a reliable fix.
+
+## 2026-10-11 20:07 UTC — All pilots finished; extension gate not met
+
+The campaign stopped after 2.35 hours with `review_required`. All four pilots completed
+497,664 additional steps each (1,990,656 total). No trainer or coordinator process remains
+active. No extension, holdout qualification, or policy release was triggered.
+
+Final checkpoints, 50 nominal development cases per family:
+
+| Motion | Control 44 | Protected 44 | Control 45 | Protected 45 |
+|---|---:|---:|---:|---:|
+| Forward | 100% | 98% | 100% | 100% |
+| Walking left turn | 88% | 98% | 82% | 82% |
+| Walking right turn | 92% | 100% | 88% | 96% |
+| Left pivot | 76% | 94% | 44% | 78% |
+| Right pivot | 98% | 82% | 46% | 94% |
+| Stop | 100% | 100% | 100% | 100% |
+| Mixed sequence | 86% | 68% | 66% | 90% |
+
+All final checkpoints failed nominal retention. Control 44, control 45, and protected 45 each
+rolled back once; protected 44 did not roll back during its budget. The best retained protected
+44 checkpoint remains step 6,340,608, with the results recorded above. For the other three
+trials, selection retained the initial baseline. Thus no approach improved with retention
+in both seeds, and the automatic extension gate correctly withheld longer training.
+
+Interpretation: selective protection produced one promising intermediate checkpoint but did
+not demonstrate repeatable improvement. Nominal failures persist without artificial delays,
+so delay robustness cannot be the sole explanation. The experiment does not isolate whether
+critic adaptation, update size, reward conflicts, or insufficient reference coverage causes
+these regressions. Next review should compare those mechanisms and per-family failure traces
+before choosing a further training change. Do not restart the same campaign or describe the
+saved intermediate policy as holdout-qualified.
