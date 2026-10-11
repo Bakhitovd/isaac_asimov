@@ -5,6 +5,32 @@ under fixed MuJoCo physics. Delay robustness is a separate, later milestone. All
 are simulation-only. The original rewards, 23 joint targets, and control observations are
 unchanged in the first comparison.
 
+See [the experiment log](COMMAND_WALK_EXPERIMENT_LOG.md) for dated observations, results,
+decisions, and outstanding work. The live run status is under `logs/mujoco_rl/command_walk_v3/`.
+
+## Rationale and uncertainties
+
+V2 showed nominal skill regression during updates and sensitivity to delays. Its aligned
+variant changed both observations and rewards, so the trials did not isolate either change.
+The pilots trained with occasional action delay but extension depended on a much harder
+combined action/sensor-delay challenge. That selection mismatch could reject intermediate
+progress; it does not explain away the measured nominal regressions.
+
+V3 tests whether selectively preserving successful baseline actions reduces forgetting while
+allowing weak skills to improve. Success is not assumed: reference coverage may be insufficient,
+the penalty may prevent useful adaptation, or the unchanged reward may still favor poor behavior.
+The control and two training seeds are necessary to distinguish these possibilities.
+
+| Result | Next decision |
+|---|---|
+| Protected PPO improves with retention in both seeds | Extend within the stated budget |
+| Both retain skills but plateau | Diagnose remaining failures and test one targeted reward change |
+| Both regress | Inspect update size, critic adaptation, sampling, and reference coverage |
+| Protection preserves behavior but blocks improvement | Revisit its strength or selected examples |
+
+These interpretations guide review; only the explicit extension and qualification gates below
+authorize automatic continuation. Healthy PPO statistics alone do not qualify a policy.
+
 ## Baseline and diagnosis
 
 The source is v1 seed 45, step 5,953,536, with its matching VecNormalize statistics.
