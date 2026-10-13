@@ -1,0 +1,688 @@
+{
+  "campaign": "command_walk_final_v1",
+  "qualified": false,
+  "stop_reason": "pilot_no_replicated_improvement",
+  "final_holdouts_opened": false,
+  "artifacts": {
+    "baseline": {
+      "trained_in_this_campaign": false,
+      "reward_kind": "original",
+      "training_seed": null,
+      "actor_training_steps": 0,
+      "pilot_improvement_passed": false,
+      "qualified": false,
+      "policy_sha256": "51032052f06ee6fc863e2a1bfe5184dcb04f10988321eb7796d30bcc1894249e",
+      "normalization_sha256": "2576182944eec959f10f416ea630485b89bca21ad4a2bf55364da86a5c338344",
+      "results": {
+        "development": {
+          "forward": [
+            50,
+            50
+          ],
+          "left_arc": [
+            50,
+            50
+          ],
+          "right_arc": [
+            50,
+            50
+          ],
+          "left_pivot": [
+            49,
+            50
+          ],
+          "right_pivot": [
+            50,
+            50
+          ],
+          "stop": [
+            50,
+            50
+          ],
+          "mixed": [
+            48,
+            50
+          ],
+          "left_exit": [
+            42,
+            50
+          ],
+          "right_exit": [
+            50,
+            50
+          ],
+          "brake_forward": [
+            50,
+            50
+          ],
+          "brake_left_arc": [
+            50,
+            50
+          ],
+          "brake_right_arc": [
+            50,
+            50
+          ],
+          "brake_left_pivot": [
+            50,
+            50
+          ],
+          "brake_right_pivot": [
+            49,
+            50
+          ],
+          "sequence": [
+            44,
+            50
+          ]
+        },
+        "confirmation": {
+          "forward": [
+            50,
+            50
+          ],
+          "left_arc": [
+            50,
+            50
+          ],
+          "right_arc": [
+            50,
+            50
+          ],
+          "left_pivot": [
+            48,
+            50
+          ],
+          "right_pivot": [
+            50,
+            50
+          ],
+          "stop": [
+            50,
+            50
+          ],
+          "mixed": [
+            50,
+            50
+          ],
+          "left_exit": [
+            42,
+            50
+          ],
+          "right_exit": [
+            50,
+            50
+          ],
+          "brake_forward": [
+            50,
+            50
+          ],
+          "brake_left_arc": [
+            50,
+            50
+          ],
+          "brake_right_arc": [
+            50,
+            50
+          ],
+          "brake_left_pivot": [
+            50,
+            50
+          ],
+          "brake_right_pivot": [
+            50,
+            50
+          ],
+          "sequence": [
+            43,
+            50
+          ]
+        }
+      }
+    },
+    "original_44": {
+      "trained_in_this_campaign": true,
+      "reward_kind": "original",
+      "training_seed": 44,
+      "actor_training_steps": 393216,
+      "pilot_improvement_passed": true,
+      "qualified": false,
+      "policy_sha256": "c44a0b790f456ddeb4445a745f9ca1f4b87ed20d2f890f9aa84261ecb86e886c",
+      "normalization_sha256": "e5ad193bcb2f96f8b659b66081940a7f4e42a4d5e8804361e6aadb95c473a17d",
+      "results": {
+        "development": {
+          "forward": [
+            50,
+            50
+          ],
+          "left_arc": [
+            50,
+            50
+          ],
+          "right_arc": [
+            50,
+            50
+          ],
+          "left_pivot": [
+            50,
+            50
+          ],
+          "right_pivot": [
+            50,
+            50
+          ],
+          "stop": [
+            50,
+            50
+          ],
+          "mixed": [
+            50,
+            50
+          ],
+          "left_exit": [
+            48,
+            50
+          ],
+          "right_exit": [
+            50,
+            50
+          ],
+          "brake_forward": [
+            50,
+            50
+          ],
+          "brake_left_arc": [
+            50,
+            50
+          ],
+          "brake_right_arc": [
+            50,
+            50
+          ],
+          "brake_left_pivot": [
+            50,
+            50
+          ],
+          "brake_right_pivot": [
+            49,
+            50
+          ],
+          "sequence": [
+            42,
+            50
+          ]
+        },
+        "confirmation": {
+          "forward": [
+            50,
+            50
+          ],
+          "left_arc": [
+            50,
+            50
+          ],
+          "right_arc": [
+            50,
+            50
+          ],
+          "left_pivot": [
+            49,
+            50
+          ],
+          "right_pivot": [
+            50,
+            50
+          ],
+          "stop": [
+            50,
+            50
+          ],
+          "mixed": [
+            50,
+            50
+          ],
+          "left_exit": [
+            47,
+            50
+          ],
+          "right_exit": [
+            50,
+            50
+          ],
+          "brake_forward": [
+            50,
+            50
+          ],
+          "brake_left_arc": [
+            50,
+            50
+          ],
+          "brake_right_arc": [
+            50,
+            50
+          ],
+          "brake_left_pivot": [
+            50,
+            50
+          ],
+          "brake_right_pivot": [
+            50,
+            50
+          ],
+          "sequence": [
+            44,
+            50
+          ]
+        }
+      }
+    },
+    "original_45": {
+      "trained_in_this_campaign": true,
+      "reward_kind": "original",
+      "training_seed": 45,
+      "actor_training_steps": 393216,
+      "pilot_improvement_passed": false,
+      "qualified": false,
+      "policy_sha256": "249bed11c4c481dfa3d4cd615be86e0e024799f476f528128b3a8b0a9c74e279",
+      "normalization_sha256": "8c107bef0579fb1c3e631f5333a3b7cdbbdee621010a1f78a553c56932657e5a",
+      "results": {
+        "development": {
+          "forward": [
+            50,
+            50
+          ],
+          "left_arc": [
+            50,
+            50
+          ],
+          "right_arc": [
+            50,
+            50
+          ],
+          "left_pivot": [
+            50,
+            50
+          ],
+          "right_pivot": [
+            50,
+            50
+          ],
+          "stop": [
+            50,
+            50
+          ],
+          "mixed": [
+            50,
+            50
+          ],
+          "left_exit": [
+            39,
+            50
+          ],
+          "right_exit": [
+            50,
+            50
+          ],
+          "brake_forward": [
+            50,
+            50
+          ],
+          "brake_left_arc": [
+            50,
+            50
+          ],
+          "brake_right_arc": [
+            50,
+            50
+          ],
+          "brake_left_pivot": [
+            50,
+            50
+          ],
+          "brake_right_pivot": [
+            48,
+            50
+          ],
+          "sequence": [
+            44,
+            50
+          ]
+        },
+        "confirmation": {
+          "forward": [
+            50,
+            50
+          ],
+          "left_arc": [
+            50,
+            50
+          ],
+          "right_arc": [
+            50,
+            50
+          ],
+          "left_pivot": [
+            48,
+            50
+          ],
+          "right_pivot": [
+            49,
+            50
+          ],
+          "stop": [
+            50,
+            50
+          ],
+          "mixed": [
+            50,
+            50
+          ],
+          "left_exit": [
+            37,
+            50
+          ],
+          "right_exit": [
+            50,
+            50
+          ],
+          "brake_forward": [
+            50,
+            50
+          ],
+          "brake_left_arc": [
+            50,
+            50
+          ],
+          "brake_right_arc": [
+            50,
+            50
+          ],
+          "brake_left_pivot": [
+            50,
+            50
+          ],
+          "brake_right_pivot": [
+            50,
+            50
+          ],
+          "sequence": [
+            41,
+            50
+          ]
+        }
+      }
+    },
+    "aligned_44": {
+      "trained_in_this_campaign": true,
+      "reward_kind": "aligned",
+      "training_seed": 44,
+      "actor_training_steps": 393216,
+      "pilot_improvement_passed": true,
+      "qualified": false,
+      "policy_sha256": "e0d6cdb3f45f6b986411d30fc78a5789a4b510223a413c7ad02530d536879afa",
+      "normalization_sha256": "4beb71d350ac35c6fdecb3a0efc12b1bfa994d0082a2a2f30de3409afcdbf3b3",
+      "results": {
+        "development": {
+          "forward": [
+            50,
+            50
+          ],
+          "left_arc": [
+            50,
+            50
+          ],
+          "right_arc": [
+            50,
+            50
+          ],
+          "left_pivot": [
+            50,
+            50
+          ],
+          "right_pivot": [
+            50,
+            50
+          ],
+          "stop": [
+            50,
+            50
+          ],
+          "mixed": [
+            49,
+            50
+          ],
+          "left_exit": [
+            47,
+            50
+          ],
+          "right_exit": [
+            50,
+            50
+          ],
+          "brake_forward": [
+            50,
+            50
+          ],
+          "brake_left_arc": [
+            50,
+            50
+          ],
+          "brake_right_arc": [
+            50,
+            50
+          ],
+          "brake_left_pivot": [
+            50,
+            50
+          ],
+          "brake_right_pivot": [
+            49,
+            50
+          ],
+          "sequence": [
+            45,
+            50
+          ]
+        },
+        "confirmation": {
+          "forward": [
+            50,
+            50
+          ],
+          "left_arc": [
+            50,
+            50
+          ],
+          "right_arc": [
+            50,
+            50
+          ],
+          "left_pivot": [
+            49,
+            50
+          ],
+          "right_pivot": [
+            50,
+            50
+          ],
+          "stop": [
+            50,
+            50
+          ],
+          "mixed": [
+            50,
+            50
+          ],
+          "left_exit": [
+            48,
+            50
+          ],
+          "right_exit": [
+            50,
+            50
+          ],
+          "brake_forward": [
+            50,
+            50
+          ],
+          "brake_left_arc": [
+            50,
+            50
+          ],
+          "brake_right_arc": [
+            50,
+            50
+          ],
+          "brake_left_pivot": [
+            50,
+            50
+          ],
+          "brake_right_pivot": [
+            50,
+            50
+          ],
+          "sequence": [
+            42,
+            50
+          ]
+        }
+      }
+    },
+    "aligned_45": {
+      "trained_in_this_campaign": true,
+      "reward_kind": "aligned",
+      "training_seed": 45,
+      "actor_training_steps": 393216,
+      "pilot_improvement_passed": false,
+      "qualified": false,
+      "policy_sha256": "104ee512b02723cedd4f28fa0ca797c35d7a66273c38d12b18082e9fefc8279e",
+      "normalization_sha256": "9f41ef92e4aa38cdd1ec8b656ee027494a928b6a6a1420230178734631a786ea",
+      "results": {
+        "development": {
+          "forward": [
+            50,
+            50
+          ],
+          "left_arc": [
+            50,
+            50
+          ],
+          "right_arc": [
+            50,
+            50
+          ],
+          "left_pivot": [
+            50,
+            50
+          ],
+          "right_pivot": [
+            49,
+            50
+          ],
+          "stop": [
+            50,
+            50
+          ],
+          "mixed": [
+            50,
+            50
+          ],
+          "left_exit": [
+            42,
+            50
+          ],
+          "right_exit": [
+            50,
+            50
+          ],
+          "brake_forward": [
+            50,
+            50
+          ],
+          "brake_left_arc": [
+            50,
+            50
+          ],
+          "brake_right_arc": [
+            50,
+            50
+          ],
+          "brake_left_pivot": [
+            50,
+            50
+          ],
+          "brake_right_pivot": [
+            49,
+            50
+          ],
+          "sequence": [
+            45,
+            50
+          ]
+        },
+        "confirmation": {
+          "forward": [
+            50,
+            50
+          ],
+          "left_arc": [
+            50,
+            50
+          ],
+          "right_arc": [
+            50,
+            50
+          ],
+          "left_pivot": [
+            48,
+            50
+          ],
+          "right_pivot": [
+            49,
+            50
+          ],
+          "stop": [
+            50,
+            50
+          ],
+          "mixed": [
+            49,
+            50
+          ],
+          "left_exit": [
+            43,
+            50
+          ],
+          "right_exit": [
+            50,
+            50
+          ],
+          "brake_forward": [
+            50,
+            50
+          ],
+          "brake_left_arc": [
+            50,
+            50
+          ],
+          "brake_right_arc": [
+            50,
+            50
+          ],
+          "brake_left_pivot": [
+            50,
+            50
+          ],
+          "brake_right_pivot": [
+            50,
+            50
+          ],
+          "sequence": [
+            42,
+            50
+          ]
+        }
+      }
+    }
+  }
+}

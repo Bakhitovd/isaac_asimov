@@ -15,6 +15,11 @@ PPO and adversarial motion priors (AMP).
 
 ## CPU MuJoCo walking
 
+**Download the latest trained walking/turning candidates:**
+[model bundle](mujoco_rl/checkpoints/moderate_walk_v1_bundle.zip?raw=true) ·
+[results and usage](mujoco_rl/checkpoints/moderate_walk_v1/README.md).
+These are experimental candidates; final qualification has not passed.
+
 The [`mujoco_rl/`](mujoco_rl/README.md) package runs native MuJoCo and PPO on
 CPU, without Isaac Sim or an NVIDIA GPU. Its full-body task controls 23 joints
 from the pinned Asimov model and trains standing before slow forward walking.

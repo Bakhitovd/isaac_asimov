@@ -1,5 +1,13 @@
 # CPU MuJoCo forward walking
 
+## Download trained walking and turning models
+
+The [moderate walking candidate package](checkpoints/moderate_walk_v1/README.md)
+contains all four trained pilots, matching normalization, controller settings,
+and complete evaluation records. [Download the bundle](checkpoints/moderate_walk_v1_bundle.zip?raw=true).
+The seed-44 candidates improved some transitions, but the campaign did not pass
+its replicated improvement gate. All candidates are explicitly unqualified.
+
 ## Simulation demos
 
 The [demo collection](demos/2026-10-05/README.md) includes walking, waypoint
@@ -146,3 +154,115 @@ See [Command walking v2](COMMAND_WALK_V2.md) for the delay curriculum, pivot rew
 See [Command walking v3](COMMAND_WALK_V3.md) for nominal-only walking/turning/stopping experiments with selective reference-policy protection and separate robustness qualification.
 
 See [Command walking v4](COMMAND_WALK_V4.md) for the 24-hour initialization diagnosis, specialist training, distillation, transition refinement, and nominal qualification campaign.
+
+### Frozen-policy steering and exploration diagnostic
+
+`command_walk_correction` compares bounded speed/yaw input corrections around the saved
+whole-body policy, then measures action-noise scales. It updates no network weights and
+keeps the original requested trajectories and physical scoring. Tuning cases are separate
+from the paired 50-case development/confirmation panels and 60-second sequences.
+
+```bash
+MUJOCO_GL=disable OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  .venv-mujoco/bin/python -u -m mujoco_rl.command_walk_correction \
+  logs/mujoco_rl/command_walk_v4/baseline/policy.zip \
+  logs/mujoco_rl/command_walk_correction_v1 --workers 8 --minutes 90 \
+  --expected-baseline logs/mujoco_rl/command_walk_v4/diagnostic_preserved_44/attempt_0/report.json
+```
+
+Use an unused output directory. Configuration, source snapshots, checkpoint/statistics hashes,
+case reports, paired comparisons, and live `status.json` are saved there. Results are diagnostic;
+completion does not publish or qualify a policy. Reviewed findings belong in the
+[experiment log](COMMAND_WALK_EXPERIMENT_LOG.md).
+
+Replay a paired case with annotated videos and a physical-trajectory plot:
+
+```bash
+MUJOCO_GL=osmesa \
+LD_LIBRARY_PATH=/home/ailevate/.local/mujoco-osmesa/usr/lib/x86_64-linux-gnu \
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 LP_NUM_THREADS=1 \
+  .venv-mujoco/bin/python -m mujoco_rl.command_walk_correction_replay \
+  logs/mujoco_rl/command_walk_correction_v1 --case left_pivot
+```
+
+The default selects the first development case improved by the correction, when available.
+Use `--seed` for a specific evaluated case and `--panel confirmation` or `--panel sequences`
+for another panel (`--case sequence` for the latter). Replays must reproduce recorded outcomes
+and metrics. Output goes under the experiment's `replays/` directory; existing replays are
+not overwritten.
+
+### Fast command-walking experiments
+
+Run the capability map, exploration calibration, braking screen, reward-component
+analysis, and bounded PPO update audit:
+
+```bash
+MUJOCO_GL=disable OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+.venv-mujoco/bin/python -u -m mujoco_rl.command_walk_fast_experiments \
+  logs/mujoco_rl/command_walk_v4/baseline/policy.zip \
+  logs/mujoco_rl/command_walk_fast_v1 --minutes 90
+```
+
+Use a new output directory. See `manifest.json` for the locked configuration,
+`status.json` for progress, `result.json` for the completed PPO comparisons,
+`reward_quality.json` for reward-versus-success summaries, and each `ppo_*` folder
+for its `train.log`, `updates.jsonl`, evaluations, and policy/normalization pairs.
+Correlated exploration is evaluated only; PPO uses its own independent Gaussian
+sampling and matching likelihood. Nothing is automatically promoted.
+
+### Preflight before a long walking run
+
+```bash
+MUJOCO_GL=disable OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+.venv-mujoco/bin/python -u -m mujoco_rl.command_walk_preflight \
+  logs/mujoco_rl/command_walk_v4/baseline/policy.zip \
+  logs/mujoco_rl/command_walk_preflight_v1 --minutes 120
+```
+
+Use a fresh output directory. This runs controller sequence/envelope checks and
+short PPO experiments with post-step full-rollout KL checking and exact optimizer
+rollback. Read `manifest.json` for the preregistered gates, `status.json` for live
+progress, `controller_gate.json` for controller results, and `result.json` for the
+final recommendation. Each training arm has `train.log`, `guard.jsonl`,
+`updates.jsonl`, and checkpoint/normalization pairs. No long training starts
+implicitly, even if the gates pass.
+
+### Final moderate-turn walking campaign (48-hour ceiling)
+
+```bash
+MUJOCO_GL=disable OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+.venv-mujoco/bin/python -u -m mujoco_rl.command_walk_final_campaign \
+  logs/mujoco_rl/command_walk_v4/baseline/policy.zip \
+  logs/mujoco_rl/command_walk_final_v1
+```
+
+Resume the same output directory by adding `--resume`. Resume keeps the original
+wall deadline and verifies the recorded Python source hashes. Simulator episodes
+restart at a rollout boundary; saved weights, Adam state, normalization, and
+curriculum are restored. A run lock rejects concurrent resumes.
+
+Supported requests: forward speed zero or 0.1–0.3 m/s; yaw rate zero or
+±0.15–0.5 rad/s. This is nominal simulation qualification, not hardware approval.
+The campaign may finish early if baseline qualification passes, the learning
+pilot has no replicated winner, or later training regresses/stalls.
+
+Read `status.json` for live progress, `pilot_decision.json` for reward selection,
+`qualification.json` for final evidence, and `result.json`/`SUMMARY.md` for the
+outcome. Checkpoints remain in `jobs/`; the selected complete controller is in
+`controller/`; labelled standalone demonstrations are in `videos/`.
+
+```python
+from mujoco_rl.command_walk_final_eval import Controller
+
+controller = Controller("logs/mujoco_rl/command_walk_final_v1/controller")
+controller.reset()  # episode start
+# One call per 20 ms tick, using 87 raw observation values before correction:
+action = controller.act(raw_observation, requested_v=0.2, requested_w=0.3)
+controller.close()
+```
+
+The controller applies correction internally. Do not pre-correct these inputs.
+The bundle's `qualified` field must be checked before presenting it as a release.
+Unsupported requested commands raise `ValueError`. Model, normalization, and
+correction settings must travel together. The MuJoCo runtime and pinned robot
+assets remain dependencies of this repository's controller loader.

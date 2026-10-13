@@ -1,0 +1,44 @@
+{
+  "version": "asimov_moderate_walk_v1",
+  "forward_range": [
+    0.1,
+    0.3
+  ],
+  "yaw_range": [
+    -0.5,
+    0.5
+  ],
+  "minimum_turn": 0.15,
+  "stop_and_pivot_speed": 0.0,
+  "correction": {
+    "name": "moderate_speed_002",
+    "heading_gain": 0.5,
+    "yaw_gain": 0.0,
+    "speed_gain": 0.0,
+    "yaw_limit": 0.15,
+    "speed_limit": 0.04,
+    "yaw_slew": 0.6,
+    "speed_slew": 0.15,
+    "filter_seconds": 0.1,
+    "turn_speed_reduction": 0.02,
+    "stop_heading_deadband": 0.0
+  },
+  "policy_dt": 0.02,
+  "observations": 87,
+  "actions": 23,
+  "physics": "nominal",
+  "qualified": false,
+  "policy_sha256": "104ee512b02723cedd4f28fa0ca797c35d7a66273c38d12b18082e9fefc8279e",
+  "normalization_sha256": "9f41ef92e4aa38cdd1ec8b656ee027494a928b6a6a1420230178734631a786ea",
+  "reports": [
+    "evaluations/development.json",
+    "evaluations/confirmation.json"
+  ],
+  "artifact_name": "aligned_45",
+  "trained_in_this_campaign": true,
+  "reward_kind": "aligned",
+  "training_seed": 45,
+  "actor_training_steps": 393216,
+  "pilot_improvement_passed": false,
+  "final_holdouts_evaluated": false
+}

@@ -1,0 +1,45 @@
+{
+  "eligible": [],
+  "arms": {
+    "original_44": {
+      "development": {
+        "retained": true,
+        "improved": true
+      },
+      "confirmation": {
+        "retained": true,
+        "improved": true
+      }
+    },
+    "original_45": {
+      "development": {
+        "retained": true,
+        "improved": false
+      },
+      "confirmation": {
+        "retained": true,
+        "improved": false
+      }
+    },
+    "aligned_44": {
+      "development": {
+        "retained": true,
+        "improved": true
+      },
+      "confirmation": {
+        "retained": true,
+        "improved": true
+      }
+    },
+    "aligned_45": {
+      "development": {
+        "retained": true,
+        "improved": false
+      },
+      "confirmation": {
+        "retained": true,
+        "improved": false
+      }
+    }
+  }
+}
